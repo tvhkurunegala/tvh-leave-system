@@ -17,82 +17,33 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        tvh: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                            950: '#172554',
-                        }
-                    }
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { tvh: { 50: '#eff6ff', 100: '#dbeafe', 800: '#1e40af', 900: '#1e3a8a', 950: '#172554' } }
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .a4-preview-container {
-            width: 100%;
-            overflow-x: auto;
-            background: #cbd5e1;
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .a4-document {
-            width: 700px;
-            height: 980px;
-            max-height: 980px;
-            background: #ffffff;
-            padding: 30px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
-            color: #0f172a;
-            font-size: 12px;
-            line-height: 1.35;
-            page-break-inside: avoid;
-            overflow: hidden;
-        }
-
-        @media (max-width: 768px) {
-            .a4-preview-container { padding: 4px; }
-            .a4-document-wrapper {
-                transform-origin: top center;
-                transform: scale(0.48);
-                margin-bottom: -500px;
-            }
-        }
-        @media (max-width: 480px) {
-            .a4-document-wrapper {
-                transform: scale(0.40);
-                margin-bottom: -580px;
-            }
-        }
-
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .a4-preview-container { width: 100%; overflow-x: auto; background: #cbd5e1; padding: 12px; display: flex; justify-content: center; }
+        .a4-document { width: 700px; height: 980px; max-height: 980px; background: #ffffff; padding: 30px; box-sizing: border-box; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); color: #0f172a; font-size: 12px; line-height: 1.35; page-break-inside: avoid; overflow: hidden; }
+        @media (max-width: 768px) { .a4-preview-container { padding: 4px; } .a4-document-wrapper { transform-origin: top center; transform: scale(0.48); margin-bottom: -500px; } }
+        @media (max-width: 480px) { .a4-document-wrapper { transform: scale(0.40); margin-bottom: -580px; } }
+        @media print { .no-print { display: none !important; } body { background: white !important; } }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 antialiased pb-12">
+
+    <!-- SYNC STATUS BAR -->
+    <div id="syncStatus" class="bg-amber-500 text-tvh-950 text-center text-[11px] font-bold py-1 no-print hidden">
+        <i class="fa-solid fa-arrows-rotate fa-spin"></i> Syncing data with Cloud Database...
+    </div>
 
     <!-- NAVIGATION BAR -->
     <nav class="bg-tvh-900 text-white sticky top-0 z-40 shadow-md no-print border-b border-tvh-800">
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="bg-amber-400 text-tvh-950 font-black px-2.5 py-1 rounded-lg text-sm">
-                    TVH
-                </div>
+                <div class="bg-amber-400 text-tvh-950 font-black px-2.5 py-1 rounded-lg text-sm">TVH</div>
                 <div>
                     <span class="font-extrabold text-base tracking-tight block leading-none">TVH - 2 System</span>
                     <span class="text-[10px] text-blue-200 font-medium">The Veterinary Hospital, Kurunegala</span>
@@ -113,12 +64,11 @@
         </div>
     </nav>
 
-    <!-- CONTAINER -->
+    <!-- MAIN CONTAINER -->
     <div class="max-w-4xl mx-auto px-2 sm:px-4 pt-4">
 
-        <!-- TAB 1: FORM INPUT & LIVE PDF PREVIEW -->
+        <!-- TAB 1: FORM -->
         <div id="tab-form" class="block space-y-6">
-
             <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-4 sm:p-6 no-print space-y-4">
                 <h2 class="text-base font-black text-slate-900 border-b pb-2 flex items-center gap-2">
                     <i class="fa-solid fa-pen-to-square text-tvh-800"></i> Leave Application Input Form
@@ -128,7 +78,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Applicant Name (නම) *</label>
-                            <select id="applicantSelect" onchange="onApplicantChange()" required class="w-full border rounded-xl p-2.5 text-xs bg-slate-55 focus:bg-white focus:ring-2 focus:ring-tvh-500 outline-none">
+                            <select id="applicantSelect" onchange="onApplicantChange()" required class="w-full border rounded-xl p-2.5 text-xs bg-slate-50 outline-none">
                                 <option value="">-- Select Staff Member --</option>
                             </select>
                         </div>
@@ -141,11 +91,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Commencing Date *</label>
-                            <input type="date" id="dateCommencing" onchange="calculateDays()" required class="w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-tvh-500 outline-none">
+                            <input type="date" id="dateCommencing" onchange="calculateDays()" required class="w-full border rounded-xl p-2.5 text-xs outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Resuming Date *</label>
-                            <input type="date" id="dateResuming" onchange="calculateDays()" required class="w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-tvh-500 outline-none">
+                            <input type="date" id="dateResuming" onchange="calculateDays()" required class="w-full border rounded-xl p-2.5 text-xs outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Total Days Applied</label>
@@ -170,7 +120,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Reason for Leave *</label>
-                        <textarea id="reason" rows="2" onkeyup="updateLiveDoc()" required placeholder="Specify reason..." class="w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-tvh-500 outline-none"></textarea>
+                        <textarea id="reason" rows="2" onkeyup="updateLiveDoc()" required placeholder="Specify reason..." class="w-full border rounded-xl p-2.5 text-xs outline-none"></textarea>
                     </div>
 
                     <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
@@ -181,16 +131,16 @@
                     </div>
 
                     <button type="submit" class="w-full bg-tvh-900 text-white font-extrabold py-3 px-4 rounded-xl hover:bg-tvh-800 transition shadow-md flex items-center justify-center gap-2 text-xs">
-                        <i class="fa-solid fa-file-pdf text-amber-400"></i> Submit & Download Perfect 1-Page A4 PDF
+                        <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i> Submit & Save to Cloud Database
                     </button>
                 </form>
             </div>
 
-            <!-- LIVE A4 DOCUMENT PREVIEW SECTION -->
+            <!-- LIVE A4 DOCUMENT PREVIEW -->
             <div class="space-y-2">
                 <div class="flex justify-between items-center no-print px-1">
                     <span class="text-xs font-bold text-slate-600 flex items-center gap-1">
-                        <i class="fa-solid fa-eye text-tvh-800"></i> Official Document Live Preview (Single Page A4 Format)
+                        <i class="fa-solid fa-eye text-tvh-800"></i> Official Document Live Preview (A4 Format)
                     </span>
                     <button onclick="downloadCurrentPDF()" class="text-xs text-tvh-800 font-extrabold hover:underline">
                         <i class="fa-solid fa-download"></i> Save PDF
@@ -201,17 +151,15 @@
                     <div class="a4-document-wrapper">
                         <div id="a4PrintDocument" class="a4-document">
                             
-                            <!-- HEADER -->
                             <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px; position: relative;">
                                 <div style="position: absolute; right: 0; top: 0; font-weight: 800; font-size: 11px; border: 1.5px solid #0f172a; padding: 2px 6px; border-radius: 4px; background: #fffbeb;">
                                     TVH - 2
                                 </div>
                                 <h2 style="font-size: 18px; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 0.5px; color: #0f172a;">THE VETERINARY HOSPITAL</h2>
-                                <p style="font-size: 10px; font-weight: 700; color: #475569; margin: 2px 0 0 0;">114, Bauddhaloka Mawatha, Kurunegala • Tel: 037-2223435</p>
+                                <p style="font-size: 10px; font-weight: 700; color: #475569; margin: 2px 0 0 0;">114, Bauddhaloka Mawatha, Kurunegala • Tel: 037-2224100</p>
                                 <p style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin-top: 6px; color: #1e3a8a; text-decoration: underline;">APPLICATION FOR LEAVE</p>
                             </div>
 
-                            <!-- APPLICANT DETAILS TABLE -->
                             <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 11px;">
                                 <tr>
                                     <td style="padding: 5px; border: 1px solid #cbd5e1; width: 22%; font-weight: 700; background: #f8fafc;">Applicant Name:</td>
@@ -227,7 +175,6 @@
                                 </tr>
                             </table>
 
-                            <!-- DATES & REASON -->
                             <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 11px;">
                                 <tr>
                                     <td style="padding: 5px; border: 1px solid #cbd5e1; width: 22%; font-weight: 700; background: #f8fafc;">Commencing Date:</td>
@@ -245,7 +192,6 @@
                                 </tr>
                             </table>
 
-                            <!-- ENTITLEMENT & BALANCE BREAKDOWN TABLE -->
                             <div style="margin-bottom: 10px;">
                                 <p style="font-weight: 800; font-size: 10px; text-transform: uppercase; margin: 0 0 3px 0; color: #334155;">LEAVE SUMMARY FOR CURRENT YEAR (2026):</p>
                                 <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 10px;">
@@ -280,11 +226,8 @@
                                 </table>
                             </div>
 
-                            <!-- SUBSTITUTE AGREEMENT -->
                             <div style="border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background: #fafafa; margin-bottom: 12px;">
-                                <p style="font-size: 10px; margin: 0 0 10px 0; font-weight: 600;">
-                                    I agree to act for the applicant during the period of leave specified above.
-                                </p>
+                                <p style="font-size: 10px; margin: 0 0 10px 0; font-weight: 600;">I agree to act for the applicant during the period of leave specified above.</p>
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                                     <div style="font-size: 10px;">
                                         <strong>Substitute Name:</strong> <span id="docSubName" style="text-decoration: underline;">-[Select Substitute]-</span>
@@ -295,17 +238,13 @@
                                 </div>
                             </div>
 
-                            <!-- APPLICANT SIGNATURE BLOCK -->
                             <div style="display: flex; justify-content: space-between; margin-bottom: 16px; padding-top: 4px; font-size: 10px;">
-                                <div>
-                                    <strong>Date:</strong> <span id="docSignDate">2026-10-26</span>
-                                </div>
+                                <div><strong>Date:</strong> <span id="docSignDate">2026-10-26</span></div>
                                 <div style="text-align: center; border-top: 1px dashed #64748b; width: 180px; padding-top: 3px; font-size: 9px; font-weight: 700;">
                                     Applicant Signature
                                 </div>
                             </div>
 
-                            <!-- OFFICIAL AUTHORIZATION BOX -->
                             <div id="docAuthBox" style="border: 1.5px solid #0f172a; padding: 10px; border-radius: 6px; background: #f8fafc;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <span style="font-weight: 800; text-transform: uppercase; font-size: 11px;">FOR OFFICE USE ONLY (AUTHORIZATION)</span>
@@ -329,33 +268,24 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- TAB 2: MANAGERS DASHBOARD -->
+        <!-- TAB 2: DASHBOARD -->
         <div id="tab-dashboard" class="hidden space-y-4">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-4 sm:p-6">
-                
-                <!-- HEADER & FILTER -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b">
                     <div>
-                        <h2 class="text-base font-black text-slate-900">Submitted Leave Requests Management</h2>
-                        <p class="text-[11px] text-slate-500">Latest requests appear first. Download PDF anytime.</p>
+                        <h2 class="text-base font-black text-slate-900">Cloud Live Leave Requests</h2>
+                        <p class="text-[11px] text-slate-500">Live synced across all devices via Google Sheet Database.</p>
                     </div>
-                    <div class="w-full sm:w-auto">
-                        <select id="filterStatus" onchange="renderDashboardRequests()" class="w-full sm:w-48 border rounded-xl p-2 text-xs bg-slate-50 font-bold outline-none">
-                            <option value="ALL">Show All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Allowed">Allowed</option>
-                            <option value="Not Allowed">Not Allowed</option>
-                        </select>
-                    </div>
+                    <select id="filterStatus" onchange="renderDashboardRequests()" class="w-full sm:w-48 border rounded-xl p-2 text-xs bg-slate-50 font-bold outline-none">
+                        <option value="ALL">Show All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Allowed">Allowed</option>
+                        <option value="Not Allowed">Not Allowed</option>
+                    </select>
                 </div>
-
-                <!-- REQUESTS LIST -->
-                <div id="requestsList" class="space-y-3">
-                    <!-- Dynamic List -->
-                </div>
+                <div id="requestsList" class="space-y-3"></div>
             </div>
         </div>
 
@@ -377,9 +307,7 @@
             <div class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Authorizer Name *</label>
-                    <select id="modalAuthorizerSelect" class="w-full border p-2.5 rounded-xl text-xs bg-slate-50 outline-none">
-                        <!-- Dynamic -->
-                    </select>
+                    <select id="modalAuthorizerSelect" class="w-full border p-2.5 rounded-xl text-xs bg-slate-50 outline-none"></select>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Authorizer PIN *</label>
@@ -399,13 +327,13 @@
 
                 <div class="flex gap-2 pt-2">
                     <button onclick="closeAuthModal()" class="w-1/2 py-2.5 text-xs font-bold text-slate-600 border rounded-xl hover:bg-slate-50">Cancel</button>
-                    <button onclick="saveDecision()" class="w-1/2 py-2.5 text-xs font-extrabold text-white bg-tvh-900 rounded-xl hover:bg-tvh-800 shadow-md">Confirm & Download PDF</button>
+                    <button onclick="saveDecision()" class="w-1/2 py-2.5 text-xs font-extrabold text-white bg-tvh-900 rounded-xl hover:bg-tvh-800 shadow-md">Confirm & Sync Cloud</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SETTINGS / DIRECTORY MODAL -->
+    <!-- SETTINGS MODAL -->
     <div id="settingsModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-2 border-b">
@@ -417,7 +345,7 @@
 
             <div id="settingsPinView" class="space-y-3">
                 <p class="text-xs text-slate-500">Enter Admin PIN to manage staff profiles and entitlements.</p>
-                <input type="password" id="adminPinInput" placeholder="Admin PIN" class="w-full border p-2.5 rounded-xl text-xs outline-none focus:ring-2 focus:ring-tvh-500">
+                <input type="password" id="adminPinInput" placeholder="Admin PIN" class="w-full border p-2.5 rounded-xl text-xs outline-none">
                 <button onclick="unlockSettings()" class="w-full py-2.5 bg-tvh-900 text-white font-extrabold rounded-xl text-xs shadow-md">Unlock Settings</button>
             </div>
 
@@ -428,12 +356,12 @@
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">New Admin PIN (Settings)</label>
-                            <input type="password" id="changeAdminPinInput" placeholder="Enter Admin PIN" class="border p-2 rounded-lg text-xs w-full bg-white outline-none">
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">New Admin PIN</label>
+                            <input type="password" id="changeAdminPinInput" class="border p-2 rounded-lg text-xs w-full bg-white outline-none">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">New Authorizer PIN (Approval)</label>
-                            <input type="password" id="changeAuthPinInput" placeholder="Enter Authorizer PIN" class="border p-2 rounded-lg text-xs w-full bg-white outline-none">
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">New Authorizer PIN</label>
+                            <input type="password" id="changeAuthPinInput" class="border p-2 rounded-lg text-xs w-full bg-white outline-none">
                         </div>
                     </div>
                     <button onclick="updateSecurityPINs()" class="w-full bg-amber-600 text-white font-extrabold py-2 rounded-lg text-xs hover:bg-amber-700 transition">
@@ -468,16 +396,17 @@
 
                 <div>
                     <h4 class="text-xs font-bold uppercase text-slate-800 mb-2">Staff Directory & Entitlements</h4>
-                    <div id="staffListContainer" class="space-y-2 max-h-52 overflow-y-auto">
-                        <!-- Dynamic List -->
-                    </div>
+                    <div id="staffListContainer" class="space-y-2 max-h-52 overflow-y-auto"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT SYSTEM LOGIC -->
+    <!-- JAVASCRIPT SYSTEM LOGIC WITH GOOGLE SHEET DATABASE -->
     <script>
+        // 🚨 PASTE YOUR GOOGLE WEB APP URL HERE
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4ZymyTD9F1ygXQjf1hxnEwQ_ur4mMWn5h_UotF1Oo5fAdJLq6poX9mQ_vZ8R9QbsE/exec";
+
         const DEFAULT_STAFF = [
             { id: 1, name: "Dr. K. Silva", designation: "Veterinary Surgeon", allowedC: 7, allowedA: 14, allowedO: 7, takenC: 1, takenA: 2, takenO: 0 },
             { id: 2, name: "A. Perera", designation: "Lab Technician", allowedC: 7, allowedA: 14, allowedO: 7, takenC: 3, takenA: 5, takenO: 1 },
@@ -486,28 +415,77 @@
 
         const AUTHORIZERS = ["Hospital Director", "Chief Medical Officer", "Senior HR Manager"];
 
-        let currentAdminPin = localStorage.getItem('tvh_admin_pin') || '1234';
-        let currentAuthPin = localStorage.getItem('tvh_auth_pin') || '9999';
+        let systemData = {
+            adminPin: '1234',
+            authPin: '9999',
+            staff: DEFAULT_STAFF,
+            requests: []
+        };
 
-        let staffData = JSON.parse(localStorage.getItem('tvh_staff_data')) || DEFAULT_STAFF;
-        let leaveRequests = JSON.parse(localStorage.getItem('tvh_requests')) || [];
         let activeAuthRequestId = null;
         let selectedDecisionStatus = null;
 
         window.onload = function() {
-            populateStaffDropdowns();
-            renderDashboardRequests();
             document.getElementById('docAppliedDate').innerText = new Date().toISOString().split('T')[0];
             document.getElementById('docSignDate').innerText = new Date().toISOString().split('T')[0];
+            loadDataFromCloud();
         };
 
-        function saveStaffData() {
-            localStorage.setItem('tvh_staff_data', JSON.stringify(staffData));
+        function showSync(show) {
+            document.getElementById('syncStatus').style.display = show ? 'block' : 'none';
         }
 
-        function saveRequestsData() {
-            localStorage.setItem('tvh_requests', JSON.stringify(leaveRequests));
-            renderDashboardRequests();
+        // LOAD DATA FROM GOOGLE SHEET
+        function loadDataFromCloud() {
+            showSync(true);
+            if(GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SHEET_WEB_APP_URL_HERE") {
+                showSync(false);
+                populateStaffDropdowns();
+                renderDashboardRequests();
+                return;
+            }
+
+            fetch(GOOGLE_SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                showSync(false);
+                if(data && data.length > 1 && data[1][0]) {
+                    try {
+                        systemData = JSON.parse(data[1][0]);
+                    } catch(e) { console.error(e); }
+                }
+                populateStaffDropdowns();
+                renderDashboardRequests();
+            })
+            .catch(err => {
+                showSync(false);
+                console.error("Cloud Fetch Error:", err);
+                populateStaffDropdowns();
+                renderDashboardRequests();
+            });
+        }
+
+        // SAVE DATA TO GOOGLE SHEET
+        function saveDataToCloud() {
+            showSync(true);
+            if(GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SHEET_WEB_APP_URL_HERE") {
+                showSync(false);
+                alert("Please add your Google Web App URL to enable Cloud Database Sync!");
+                return;
+            }
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: "saveAll", payload: systemData })
+            }).then(() => {
+                showSync(false);
+                renderDashboardRequests();
+            }).catch(err => {
+                showSync(false);
+                alert("Cloud Sync Error! Check internet connection.");
+            });
         }
 
         function populateStaffDropdowns() {
@@ -517,7 +495,7 @@
             applicantSelect.innerHTML = '<option value="">-- Select Staff Member --</option>';
             subSelect.innerHTML = '<option value="">-- Select Substitute Staff Member --</option>';
 
-            staffData.forEach(s => {
+            systemData.staff.forEach(s => {
                 applicantSelect.innerHTML += `<option value="${s.id}">${s.name} (${s.designation})</option>`;
                 subSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
             });
@@ -534,10 +512,9 @@
                 return;
             }
 
-            const staff = staffData.find(s => s.id == selectedId);
+            const staff = systemData.staff.find(s => s.id == selectedId);
             if(staff) {
                 desigInput.value = staff.designation;
-                
                 document.getElementById('docName').innerText = staff.name;
                 document.getElementById('docDesig').innerText = staff.designation;
 
@@ -574,13 +551,11 @@
 
         function updateLiveDoc() {
             const typeRadio = document.querySelector('input[name="leaveType"]:checked');
-            if(typeRadio) {
-                document.getElementById('docCategory').innerText = typeRadio.value;
-            }
+            if(typeRadio) document.getElementById('docCategory').innerText = typeRadio.value;
             document.getElementById('docReason').innerText = document.getElementById('reason').value || '-';
 
             const subId = document.getElementById('substituteSelect').value;
-            const subStaff = staffData.find(s => s.id == subId);
+            const subStaff = systemData.staff.find(s => s.id == subId);
             document.getElementById('docSubName').innerText = subStaff ? subStaff.name : '-[Select Substitute]-';
         }
 
@@ -602,9 +577,9 @@
         function handleFormSubmit(e) {
             e.preventDefault();
             const staffId = document.getElementById('applicantSelect').value;
-            const staff = staffData.find(s => s.id == staffId);
+            const staff = systemData.staff.find(s => s.id == staffId);
             const subId = document.getElementById('substituteSelect').value;
-            const substitute = staffData.find(s => s.id == subId);
+            const substitute = systemData.staff.find(s => s.id == subId);
             const type = document.querySelector('input[name="leaveType"]:checked').value;
 
             const req = {
@@ -623,17 +598,11 @@
                 appliedAt: new Date().toISOString().split('T')[0]
             };
 
-            leaveRequests.unshift(req);
-            saveRequestsData();
-
-            document.getElementById('docAuthBadge').innerText = "PENDING APPROVAL";
-            document.getElementById('docAuthBadge').style.background = "#f1f5f9";
-            document.getElementById('docAuthBadge').style.color = "#475569";
-            document.getElementById('docAuthorizerName').innerText = "-[Pending]-";
-            document.getElementById('docAuthDate').innerText = "-";
+            systemData.requests.unshift(req);
+            saveDataToCloud();
 
             downloadCurrentPDF(`TVH_Leave_Application_${staff.name}.pdf`);
-            alert('Leave Application submitted and single-page PDF downloaded successfully!');
+            alert('Leave Application submitted & synced to Cloud Database!');
             document.getElementById('leaveForm').reset();
         }
 
@@ -644,6 +613,7 @@
             } else {
                 document.getElementById('tab-form').classList.add('hidden');
                 document.getElementById('tab-dashboard').classList.remove('hidden');
+                loadDataFromCloud();
             }
         }
 
@@ -652,7 +622,7 @@
             const badge = document.getElementById('pending-badge');
             list.innerHTML = '';
 
-            const pendingCount = leaveRequests.filter(r => r.status === 'Pending').length;
+            const pendingCount = systemData.requests.filter(r => r.status === 'Pending').length;
             if(pendingCount > 0) {
                 badge.innerText = pendingCount;
                 badge.classList.remove('hidden');
@@ -661,8 +631,7 @@
             }
 
             const statusFilter = document.getElementById('filterStatus').value;
-            // leaveRequests is already unshifted (newest first), so newest requests come on top
-            const filtered = leaveRequests.filter(r => (statusFilter === 'ALL' || r.status === statusFilter));
+            const filtered = systemData.requests.filter(r => (statusFilter === 'ALL' || r.status === statusFilter));
 
             if(filtered.length === 0) {
                 list.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No matching applications found.</p>`;
@@ -686,7 +655,7 @@
                             <p class="text-[10px] text-slate-400">Auth: ${r.authorizer || 'Pending'}</p>
                         </div>
                         <div class="flex gap-2 w-full md:w-auto items-center flex-wrap">
-                            <button onclick="loadRequestIntoView(${r.id})" class="px-2.5 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 flex items-center gap-1">
+                            <button onclick="loadRequestIntoView(${r.id})" class="px-2.5 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold flex items-center gap-1">
                                 <i class="fa-solid fa-file-pdf"></i> Download PDF
                             </button>
                             ${r.status === 'Pending' ? `
@@ -704,9 +673,8 @@
             });
         }
 
-        // Load specific saved request into the form live preview so user can download PDF anytime
         function loadRequestIntoView(id) {
-            const req = leaveRequests.find(r => r.id === id);
+            const req = systemData.requests.find(r => r.id === id);
             if(!req) return;
 
             document.getElementById('applicantSelect').value = req.staffId;
@@ -735,7 +703,7 @@
 
         function openAuthModal(id) {
             activeAuthRequestId = id;
-            const req = leaveRequests.find(r => r.id === id);
+            const req = systemData.requests.find(r => r.id === id);
             const select = document.getElementById('modalAuthorizerSelect');
             select.innerHTML = '';
             AUTHORIZERS.forEach(a => {
@@ -769,7 +737,7 @@
 
         function saveDecision() {
             const pin = document.getElementById('modalAuthorizerPin').value;
-            if(pin !== currentAuthPin) {
+            if(pin !== systemData.authPin) {
                 alert('Invalid Authorizer PIN!');
                 return;
             }
@@ -778,32 +746,28 @@
                 return;
             }
 
-            const req = leaveRequests.find(r => r.id === activeAuthRequestId);
+            const req = systemData.requests.find(r => r.id === activeAuthRequestId);
             if(req) {
                 const prevStatus = req.status;
                 req.status = selectedDecisionStatus;
                 req.authorizer = document.getElementById('modalAuthorizerSelect').value;
 
-                const staff = staffData.find(s => s.id === req.staffId);
+                const staff = systemData.staff.find(s => s.id === req.staffId);
                 if(staff) {
                     const days = parseFloat(req.numDays);
-
                     if(prevStatus === 'Allowed' && selectedDecisionStatus !== 'Allowed') {
                         if(req.leaveType === 'Casual') staff.takenC = Math.max(0, staff.takenC - days);
                         if(req.leaveType === 'Annual') staff.takenA = Math.max(0, staff.takenA - days);
                         if(req.leaveType === 'Others') staff.takenO = Math.max(0, staff.takenO - days);
                     }
-
                     if(prevStatus !== 'Allowed' && selectedDecisionStatus === 'Allowed') {
                         if(req.leaveType === 'Casual') staff.takenC += days;
                         if(req.leaveType === 'Annual') staff.takenA += days;
                         if(req.leaveType === 'Others') staff.takenO += days;
                     }
-
-                    saveStaffData();
                 }
 
-                saveRequestsData();
+                saveDataToCloud();
                 closeAuthModal();
 
                 document.getElementById('applicantSelect').value = req.staffId;
@@ -828,7 +792,6 @@
 
                 setTimeout(() => {
                     downloadCurrentPDF(`TVH_Leave_${req.status}_${req.applicantName}.pdf`);
-                    
                     const msg = `Leave Request Decision (TVH-2)%0AName: ${req.applicantName}%0ALeave Dates: ${req.commencing} to ${req.resuming}%0AStatus: ${req.status}%0ABy: ${req.authorizer}`;
                     window.open(`https://wa.me/?text=${msg}`, '_blank');
                 }, 400);
@@ -847,11 +810,11 @@
 
         function unlockSettings() {
             const pin = document.getElementById('adminPinInput').value;
-            if(pin === currentAdminPin) {
+            if(pin === systemData.adminPin) {
                 document.getElementById('settingsPinView').classList.add('hidden');
                 document.getElementById('settingsContentView').classList.remove('hidden');
-                document.getElementById('changeAdminPinInput').value = currentAdminPin;
-                document.getElementById('changeAuthPinInput').value = currentAuthPin;
+                document.getElementById('changeAdminPinInput').value = systemData.adminPin;
+                document.getElementById('changeAuthPinInput').value = systemData.authPin;
                 renderStaffList();
             } else {
                 alert('Incorrect Admin PIN');
@@ -867,19 +830,16 @@
                 return;
             }
 
-            currentAdminPin = newAdmin;
-            currentAuthPin = newAuth;
-
-            localStorage.setItem('tvh_admin_pin', currentAdminPin);
-            localStorage.setItem('tvh_auth_pin', currentAuthPin);
-
-            alert('Security PINs updated successfully!');
+            systemData.adminPin = newAdmin;
+            systemData.authPin = newAuth;
+            saveDataToCloud();
+            alert('Security PINs updated and saved to Cloud Database!');
         }
 
         function renderStaffList() {
             const container = document.getElementById('staffListContainer');
             container.innerHTML = '';
-            staffData.forEach(s => {
+            systemData.staff.forEach(s => {
                 container.innerHTML += `
                     <div class="p-2 border rounded-xl bg-slate-50 flex justify-between items-center text-xs">
                         <div>
@@ -897,7 +857,7 @@
             const desig = document.getElementById('newStaffDesig').value;
             if(!name || !desig) return alert('Enter both name and designation');
 
-            staffData.push({
+            systemData.staff.push({
                 id: Date.now(),
                 name: name,
                 designation: desig,
@@ -907,15 +867,15 @@
                 takenC: 0, takenA: 0, takenO: 0
             });
 
-            saveStaffData();
+            saveDataToCloud();
             populateStaffDropdowns();
             renderStaffList();
-            alert('Staff member added!');
+            alert('Staff member added and synced to Cloud Database!');
         }
 
         function removeStaff(id) {
-            staffData = staffData.filter(s => s.id !== id);
-            saveStaffData();
+            systemData.staff = systemData.staff.filter(s => s.id !== id);
+            saveDataToCloud();
             populateStaffDropdowns();
             renderStaffList();
         }
